@@ -10,6 +10,11 @@ public class RatoMovimento : MonoBehaviour
     private float tempoProximoFlip = 0f;
     public float intervaloFlip = 1f;
 
+    //para musica
+    private float tempoUltimoSomParede = 0f;
+    private float intervaloSomParede = 0.2f; // mínimo de tempo entre os sons, em segundos
+
+
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -36,6 +41,13 @@ public class RatoMovimento : MonoBehaviour
         {
             // Só move se não tiver parede na frente
             transform.position += direcao * velocidade * Time.deltaTime;
+        }else{
+            // Só toca o som se já passou tempo suficiente
+            if (Time.time - tempoUltimoSomParede > intervaloSomParede)
+            {
+                SomController.instancia.TocarSomParede();
+                tempoUltimoSomParede = Time.time;
+            }
         }
 
         // Rotaciona o rato para olhar na direção
